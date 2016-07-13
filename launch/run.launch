@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+<launch>	
+
+ 	<include file="$(find aiibot_bringup)/launch/base_control_demo_1.launch" />
+
+ 	<!-- <include file="$(find aiibot_base_control)/launch/base_control_demo_2.launch" /> -->
+ 	
+ 	<include file="$(find aiibot_rplidar)/launch/rplidar.launch" />
+    
+ 	<!-- <include file="$(find aiibot_teleop)/launch/keyboard_teleop.launch" /> -->
+</launch> 

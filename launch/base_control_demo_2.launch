@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>    
+    <!--<arg name="cmd_topic" default="cmd_vel_mux/input/teleop" />-->
+    <arg name="cmd_topic" default="cmd_vel" />
+
+    <arg name="simulation" default="false"/>
+    <param name="/use_sim_time" value="$(arg simulation)"/>
+
+    <node pkg="aiibot_bringup" type="monitor_serial_node" name="monitor_serial_node" output="screen">
+        <param name="cmd_topic" value="$(arg cmd_topic)" />
+        <param name="Base_Port" value="/dev/ttyUSB0" />
+        <param name="talker_topic" value="/talker_boost_serial" />
+    </node>
+
+    <node pkg="aiibot_bringup" type="cmd_boost_node" name="cmd_boost_node" output="screen">
+        <param name="talker_topic" value="/talker_boost_serial" />
+    </node>
+
+</launch> 
