@@ -7,9 +7,9 @@
 #include <boost/bind.hpp>
 #include <math.h>
 
-class SubscribeAndPublish 
-{ 
-public: 
+class SubscribeAndPublish
+{
+public:
     double x;
     double y ;
     double th;
@@ -18,25 +18,25 @@ public:
     double vy;
     double vth;
 
-    ros::NodeHandle n; 
+    ros::NodeHandle n;
     ros::Publisher odom_pub;
     ros::Subscriber sub;
     ros::Time current_time, last_time;
     tf::TransformBroadcaster odom_broadcaster;
 
     SubscribeAndPublish(std::string talker_topic)
-    { 
+    {
         odom_pub = n.advertise<nav_msgs::Odometry>("odom", 100);
         sub = n.subscribe(talker_topic, 10, &SubscribeAndPublish::chatterCallback,this); //监听
-    } 
+    }
 
-    void chatterCallback(const geometry_msgs::Twist & msg) 
-    { 
+    void chatterCallback(const geometry_msgs::Twist & msg)
+    {
         current_time = ros::Time::now();
         vx = msg.linear.x;
         vy = msg.linear.y;
-        vth = msg.angular.z;    
-        if(vx <= -5.0 || vx >= 5.0)   
+        vth = msg.angular.z;
+        if(vx <= -5.0 || vx >= 5.0)
             vx = 0.0;
         if(vth <= -5.0 || vth >= 5.0)
             vth = 0.0;
@@ -50,7 +50,7 @@ public:
         th += delta_th;
 
         geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
-    
+
         geometry_msgs::TransformStamped odom_trans;
         odom_trans.header.stamp = current_time;
         odom_trans.header.frame_id = "odom";
@@ -79,13 +79,11 @@ public:
 
         odom_pub.publish(odom);
         last_time = current_time;
-        //std::cout<<"Time: "<< dt<<std::endl; 
-    } 
-
+    }
 };
 
-int main(int argc, char **argv) 
-{ 
+int main(int argc, char **argv)
+{
 
     ros::init(argc, argv, "Odometry_publisher");
     ros::NodeHandle nh_private("~");
@@ -94,8 +92,8 @@ int main(int argc, char **argv)
         talker_topic = "/talker_boost_serial";
     }
 
-    SubscribeAndPublish SAPObject(talker_topic); 
-    
+    SubscribeAndPublish SAPObject(talker_topic);
+
     SAPObject.current_time = ros::Time::now();
     SAPObject.last_time = ros::Time::now();
     ros::spin();

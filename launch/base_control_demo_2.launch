@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<launch>    
+<launch>
     <!--<arg name="cmd_topic" default="cmd_vel_mux/input/teleop" />-->
     <arg name="cmd_topic" default="cmd_vel" />
 
@@ -16,4 +16,4 @@
         <param name="talker_topic" value="/talker_boost_serial" />
     </node>
 
-</launch> 
+</launch>

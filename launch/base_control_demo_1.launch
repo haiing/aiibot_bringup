@@ -1,12 +1,12 @@
 <?xml version="1.0"?>
-<launch>	
-	<!--<arg name="cmd_topic" default="cmd_vel_mux/input/teleop" />-->
-	<arg name="cmd_topic" default="cmd_vel" />
-	<arg name="simulation" default="false"/>
+<launch>
+    <!--<arg name="cmd_topic" default="cmd_vel_mux/input/teleop" />-->
+    <arg name="cmd_topic" default="cmd_vel" />
+    <arg name="simulation" default="false"/>
     <param name="/use_sim_time" value="$(arg simulation)"/>
-    
+
     <node pkg="aiibot_bringup" type="tf_broadcaster_node" name="tf_broadcaster_node">
-		<param name="cmd_topic" value="$(arg cmd_topic)" />
-		<param name="Base_Port" value="/dev/ttyUSB0" />
-	</node>
-</launch> 
+        <param name="cmd_topic" value="$(arg cmd_topic)" />
+        <param name="Base_Port" value="/dev/ttyUSB0" />
+    </node>
+</launch>

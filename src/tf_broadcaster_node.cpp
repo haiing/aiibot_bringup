@@ -37,7 +37,7 @@ union Max_Value{
 
 static ros::Time current_time;
 static ros::Time last_time;
-geometry_msgs::Quaternion odom_quat;  
+geometry_msgs::Quaternion odom_quat;
 
 unsigned char buf1[10];
 float Data_vx;
@@ -47,7 +47,7 @@ int HerdWore_vx;
 int HerdWore_vth;
 
 void cmd_velCallback(const geometry_msgs::Twist &twist_aux)
-{       
+{
     float vel_x = twist_aux.linear.x;
     float vel_th = twist_aux.angular.z;
 
@@ -74,12 +74,11 @@ void cmd_velCallback(const geometry_msgs::Twist &twist_aux)
 
     // Send_Data.Float_RAM._float_vLeft = left_vel;
     // Send_Data.Float_RAM._float_vRight = right_vel;
-    ROS_INFO("cmd_vel linear.x  is %f",vel_x);
-    ROS_INFO("cmd_vel angular.z is %f",vel_th);
+    // ROS_INFO("cmd_vel linear.x  is %f",vel_x);
+    // ROS_INFO("cmd_vel angular.z is %f",vel_th);
 
     Send_Data.Float_RAM._float_vLeft = vel_x;
     Send_Data.Float_RAM._float_vRight = vel_th;
-    
 }
 
 int main(int argc, char** argv){
@@ -99,7 +98,7 @@ int main(int argc, char** argv){
     ros::Publisher odom_pub = nh.advertise<nav_msgs::Odometry>("odom", 50);
     ros::Subscriber cmd_vel_sub = nh.subscribe(cmd_topic, 10, cmd_velCallback);
     tf::TransformBroadcaster odom_broadcaster;
-    
+
     io_service iosev;
     serial_port sp(iosev);
     sp.open(Base_Port);
@@ -113,8 +112,8 @@ int main(int argc, char** argv){
     last_time = ros::Time::now();
 
     while(ros::ok()){
+        ros::spinOnce();                    // check for incoming messages
 
-        ros::spinOnce();                    // check for incoming messages   
         write(sp, buffer(&startByte, 1));
         write(sp, buffer(Send_Data.buf, 8));
         write(sp, buffer(&endByte, 1));
@@ -128,11 +127,11 @@ int main(int argc, char** argv){
             Data_vth = *((float *)&HerdWore_vth);
             vx = (double)Data_vx;
             vth = (double)Data_vth;
-        }   
+        }
         ROS_INFO("Encores linear is %f", vx);
         ROS_INFO("Encores angular is %f\n ", vth);
 
-        if(vx <= -5.0 || vx >= 5.0)   
+        if(vx <= -5.0 || vx >= 5.0)
             vx = 0.0;
         if(vth <= -5.0 || vth >= 5.0)
             vth = 0.0;
