@@ -72,8 +72,8 @@ void Monitor_Serial_Data(const geometry_msgs::Twist &msg)
     msg_encoder.linear.x  = vx;//填充odom_tf_package::serial_boost消息变量
     msg_encoder.angular.z = vth;
     chatter_pub.publish(msg_encoder);//在"talker_boost_serial"话题下发布数据
-    // ROS_INFO("msg_encoder.linear_x  is %f",msg_encoder.linear.x);
-    // ROS_INFO("msg_encoder.angular_z is %f",msg_encoder.angular.z);
+    ROS_INFO("msg_encoder.linear_x  is %f",msg_encoder.linear.x);
+    ROS_INFO("msg_encoder.angular_z is %f",msg_encoder.angular.z);
 
     iosev.run();
 }
