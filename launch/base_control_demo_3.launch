@@ -11,7 +11,7 @@
         <param name="Base_Port" value="/dev/ttyUSB0" />
     </node>
 
-    <node pkg="aiibot_bringup" type="odometry_recv" name="odometry_recv" output="screen">
+    <node pkg="aiibot_bringup" type="odometry_recv" name="odometry_recv">
         <param name="Base_Port" value="/dev/ttyUSB0" />
     </node>
 

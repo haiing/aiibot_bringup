@@ -24,13 +24,16 @@ static ros::Time current_time;
 static ros::Time last_time;
 geometry_msgs::Quaternion odom_quat;
 
-unsigned char buf1[10];
+unsigned char recv_buffer[8];
+unsigned char recv_buffer_temp[1];
 float Data_vx;
 float Data_vth;
 
 int HerdWore_vx;
 int HerdWore_vth;
 
+bool isStart = false;
+int recv_buf_num = 0;
 
 int main(int argc, char** argv){
     ros::init(argc, argv, "odometry_publisher");
@@ -58,34 +61,65 @@ int main(int argc, char** argv){
     last_time = ros::Time::now();
 
     while(ros::ok()){
-        current_time = ros::Time::now();
 
-        read(sp, buffer(buf1));
-        if(buf1[0] == startByte && buf1[9] == endByte){
-            HerdWore_vx = (buf1[4] << 24 | buf1[3] << 16 | buf1[2] << 8 | buf1[1]);
-            HerdWore_vth = (buf1[8] << 24 | buf1[7] << 16 | buf1[6] << 8 | buf1[5]);
-            Data_vx = *((float *)&HerdWore_vx);
-            Data_vth = *((float *)&HerdWore_vth);
-            vx = (double)Data_vx;
-            vth = (double)Data_vth;
-
-            ROS_INFO("Encores linear is %f", vx);
-            ROS_INFO("Encores angular is %f\n ", vth);
-
-            if(vx <= -5.0 || vx >= 5.0)
-                vx = 0.0;
-            if(vth <= -5.0 || vth >= 5.0)
-                vth = 0.0;
-
-            //compute odometry in a typical way given the velocities of the robot
-            double dt = (current_time - last_time).toSec();
-            double delta_x = (vx * cos(th) - vy * sin(th)) * dt;
-            double delta_y = (vx * sin(th) + vy * cos(th)) * dt;
-            double delta_th = vth * dt;
-            x += delta_x;
-            y += delta_y;
-            th += delta_th;
+        read(sp, buffer(recv_buffer_temp));
+    
+        if(isStart == false)
+        {
+            if(recv_buffer_temp[0] == startByte)
+            {
+                isStart = true;
+                recv_buf_num = 0;
+            }
+            continue;
         }
+        else
+        {
+            if (recv_buf_num < 8)
+            {
+                recv_buffer[recv_buf_num] = recv_buffer_temp[0];
+                recv_buf_num ++;
+                continue;
+
+            }else if (recv_buffer_temp[0] != endByte)
+            {
+                recv_buf_num = 0;
+                if(recv_buffer_temp[0] != startByte)
+                    isStart = false;
+                continue;
+
+            }else{
+                isStart = false;
+                recv_buf_num = 0;
+
+                current_time = ros::Time::now();
+        
+                HerdWore_vx = (recv_buffer[3] << 24 | recv_buffer[2] << 16 | recv_buffer[1] << 8 | recv_buffer[0]);
+                HerdWore_vth = (recv_buffer[7] << 24 | recv_buffer[6] << 16 | recv_buffer[5] << 8 | recv_buffer[4]);
+                Data_vx = *((float *)&HerdWore_vx);
+                Data_vth = *((float *)&HerdWore_vth);
+                vx = (double)Data_vx;
+                vth = (double)Data_vth;
+
+                ROS_INFO("Encores linear is %f", vx);
+                ROS_INFO("Encores angular is %f\n ", vth);
+
+                if(vx <= -5.0 || vx >= 5.0)
+                    vx = 0.0;
+                if(vth <= -5.0 || vth >= 5.0)
+                    vth = 0.0;
+
+                //compute odometry in a typical way given the velocities of the robot
+                double dt = (current_time - last_time).toSec();
+                double delta_x = (vx * cos(th) - vy * sin(th)) * dt;
+                double delta_y = (vx * sin(th) + vy * cos(th)) * dt;
+                double delta_th = vth * dt;
+                x += delta_x;
+                y += delta_y;
+                th += delta_th;
+            }
+        }
+
         //since all odometry is 6DOF we'll need a quaternion created from yaw
         geometry_msgs::Quaternion odom_quat = tf::createQuaternionMsgFromYaw(th);
 
