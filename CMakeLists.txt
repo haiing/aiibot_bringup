@@ -19,7 +19,6 @@ include_directories(
   ${catkin_INCLUDE_DIRS}
 )
 
-
 add_executable(tf_broadcaster_node src/tf_broadcaster_node.cpp)
 target_link_libraries(tf_broadcaster_node
   ${catkin_LIBRARIES}
@@ -35,3 +34,12 @@ target_link_libraries(cmd_boost_node
   ${catkin_LIBRARIES}
 )
 
+add_executable(velocity_send src/send_node.cpp)
+target_link_libraries(velocity_send
+  ${catkin_LIBRARIES}
+)
+
+add_executable(odometry_recv src/recv_node.cpp)
+target_link_libraries(odometry_recv
+  ${catkin_LIBRARIES}
+)
