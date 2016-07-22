@@ -30,8 +30,8 @@ std::string Base_Port = "";
 union Max_Value{
     unsigned char buf[8];
     struct _Float_{
-        float _float_vLeft;
-        float _float_vRight;
+        float _float_vX;
+        float _float_vTh;
     }Float_RAM;
 }Send_Data;
 
@@ -77,8 +77,8 @@ void cmd_velCallback(const geometry_msgs::Twist &twist_aux)
     // ROS_INFO("cmd_vel linear.x  is %f",vel_x);
     // ROS_INFO("cmd_vel angular.z is %f",vel_th);
 
-    Send_Data.Float_RAM._float_vLeft = vel_x;
-    Send_Data.Float_RAM._float_vRight = vel_th;
+    Send_Data.Float_RAM._float_vX = vel_x;
+    Send_Data.Float_RAM._float_vTh = vel_th;
 }
 
 int main(int argc, char** argv){

@@ -29,8 +29,8 @@ ros::Publisher chatter_pub;
 union Max_Value{
     unsigned char buf[8];
     struct _Float_{
-        float _float_vx;
-        float _float_vth;
+        float _float_vX;
+        float _float_vTh;
     }Float_RAM;
 }Send_Data;
 
@@ -48,8 +48,8 @@ void Monitor_Serial_Data(const geometry_msgs::Twist &msg)
     float msg_vx = msg.linear.x;
     float msg_vth = msg.angular.z;
 
-    Send_Data.Float_RAM._float_vx = msg_vx;
-    Send_Data.Float_RAM._float_vth = msg_vth;
+    Send_Data.Float_RAM._float_vX = msg_vx;
+    Send_Data.Float_RAM._float_vTh = msg_vth;
     // ROS_INFO("cmd_vel linear.x  is %f",msg_vx);
     // ROS_INFO("cmd_vel angular.z is %f\n",msg_vth);
 

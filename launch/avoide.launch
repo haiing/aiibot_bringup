@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<launch>
+    <!--<arg name="cmd_topic" default="cmd_vel_mux/input/teleop" />-->
+    <arg name="cmd_topic" default="cmd_vel" />
+
+    <arg name="simulation" default="false"/>
+    <param name="/use_sim_time" value="$(arg simulation)"/>
+
+    <node pkg="aiibot_bringup" type="odometry_recv" name="odometry_recv">
+        <param name="Base_Port" value="/dev/ttyUSB0" />
+    </node>
+
+    <include file="$(find aiibot_rplidar)/launch/rplidar.launch" />
+
+</launch>

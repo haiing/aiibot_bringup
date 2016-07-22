@@ -19,8 +19,8 @@ unsigned char endByte = 0xfe;
 union Max_Value{
     unsigned char buf[8];
     struct _Float_{
-        float _float_vLeft;
-        float _float_vRight;
+        float _float_vX;
+        float _float_vTh;
     }Float_RAM;
 }Send_Data;
 
@@ -29,8 +29,8 @@ serial_port sp(iosev);
 
 void cmd_velCallback(const geometry_msgs::Twist &twist_aux)
 {
-    Send_Data.Float_RAM._float_vLeft = twist_aux.linear.x;
-    Send_Data.Float_RAM._float_vRight = twist_aux.angular.z;
+    Send_Data.Float_RAM._float_vX = -1 * twist_aux.linear.x;
+    Send_Data.Float_RAM._float_vTh = twist_aux.angular.z;
 
     ROS_INFO("cmd_vel linear.x  is %f", twist_aux.linear.x);
     ROS_INFO("cmd_vel angular.z is %f\n", twist_aux.angular.z);
