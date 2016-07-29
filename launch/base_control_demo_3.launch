@@ -2,17 +2,18 @@
 <launch>
     <!--<arg name="cmd_topic" default="cmd_vel_mux/input/teleop" />-->
     <arg name="cmd_topic" default="cmd_vel" />
+    <arg name="port" default="/dev/ttyUSB0" />
 
     <arg name="simulation" default="false"/>
     <param name="/use_sim_time" value="$(arg simulation)"/>
 
     <node pkg="aiibot_bringup" type="velocity_send" name="velocity_send">
         <param name="cmd_topic" value="$(arg cmd_topic)" />
-        <param name="Base_Port" value="/dev/ttyUSB0" />
+        <param name="Base_Port" value="$(arg port)" />
     </node>
 
     <node pkg="aiibot_bringup" type="odometry_recv" name="odometry_recv">
-        <param name="Base_Port" value="/dev/ttyUSB0" />
+        <param name="Base_Port" value="$(arg port)" />
     </node>
 
 </launch>

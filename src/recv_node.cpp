@@ -104,9 +104,9 @@ int main(int argc, char** argv){
                 ROS_INFO("Encores linear is %f", vx);
                 ROS_INFO("Encores angular is %f\n ", vth);
 
-                if(vx <= -5.0 || vx >= 5.0)
+                if(vx <= -10.0 || vx >= 10.0)
                     vx = 0.0;
-                if(vth <= -5.0 || vth >= 5.0)
+                if(vth <= -10.0 || vth >= 10.0)
                     vth = 0.0;
 
                 //compute odometry in a typical way given the velocities of the robot

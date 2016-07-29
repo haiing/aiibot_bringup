@@ -29,7 +29,7 @@ serial_port sp(iosev);
 
 void cmd_velCallback(const geometry_msgs::Twist &twist_aux)
 {
-    Send_Data.Float_RAM._float_vX = -1 * twist_aux.linear.x;
+    Send_Data.Float_RAM._float_vX = twist_aux.linear.x;
     Send_Data.Float_RAM._float_vTh = twist_aux.angular.z;
 
     ROS_INFO("cmd_vel linear.x  is %f", twist_aux.linear.x);

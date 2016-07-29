@@ -6,6 +6,8 @@
     <arg name="simulation" default="false"/>
     <param name="/use_sim_time" value="$(arg simulation)"/>
 
+    <include file="$(find openni_launch)/launch/openni.launch" />
+
     <node pkg="aiibot_bringup" type="velocity_send" name="velocity_send">
         <param name="cmd_topic" value="$(arg cmd_topic)" />
         <param name="Base_Port" value="/dev/ttyUSB0" />
